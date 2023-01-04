@@ -73,6 +73,7 @@ class App:
         key_byte_length: int = 1,
     ) -> int:
         gs_value_bytes = self.extract_state_bytes_value(app_id, key, address, state, key_byte_length)
+        state = self.get_state(app_id, key, address, state, key_byte_length) if not state else state
         value = state.value.uint if not size else int.from_bytes(gs_value_bytes[offset : offset + size], "big")
         return value
 

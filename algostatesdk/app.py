@@ -8,6 +8,7 @@ from dacite import from_dict
 
 from algostatesdk.models.app import *
 from algostatesdk.models.states import State, StateCustom
+from algostatesdk import exceptions
 
 
 class App:
@@ -19,8 +20,11 @@ class App:
         return from_dict(Application, json.loads(res))
 
     def get_app_local_state(self, address: str, app_id: int) -> ApplicationLocalState:
-        res = json.dumps(self.algod_client.account_application_info(address, app_id)).replace("-", "_")  # TODO
-        return from_dict(ApplicationLocalState, json.loads(res))
+        try:
+            res = json.dumps(self.algod_client.account_application_info(address, app_id)).replace("-", "_")  # TODO
+            return from_dict(ApplicationLocalState, json.loads(res))
+        except:
+            raise exceptions.NoLocalStatesFound(app_id, address)
 
     def get_global_states(self, app_id: int) -> List[State]:
         return self.get_app(app_id).params.global_state
@@ -35,7 +39,10 @@ class App:
             states if states else self.get_local_states(address, app_id) if address else self.get_global_states(app_id)
         )
         byte_key = bytes(key, "utf-8") if type(key) == str else key.to_bytes(key_byte_length, "big")
-        return next(filter(lambda gs: base64.b64decode(gs.key) == byte_key, states), None)
+        state = next(filter(lambda gs: base64.b64decode(gs.key) == byte_key, states), None)
+        if not state:
+            raise exceptions.NoLocalStateMatch(key, app_id, address)
+        return state
 
     def extract_state_bytes_value(
         self,

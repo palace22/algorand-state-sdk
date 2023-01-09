@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Literal, List
+from typing import Literal, List, Optional
 
 
 @dataclass
@@ -26,7 +26,7 @@ class AttributeCustom:
 @dataclass
 class StateCustom:
     key: str | int
-    key_byte_length: int
-    is_box: bool
+    key_byte_length: Optional[int]
+    is_box: Optional[bool]
     address: str
     attrs: List[AttributeCustom]

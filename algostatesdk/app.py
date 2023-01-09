@@ -26,6 +26,10 @@ class App:
         except:
             raise exceptions.NoLocalStatesFound(app_id, address)
 
+    def get_state_from_box(self, app_id: int, byte_key):
+        box = self.algod_client.application_box_by_name(app_id, byte_key)
+        return State(box["name"], Value(box["value"], 0, 0))
+
     def get_global_states(self, app_id: int) -> List[State]:
         return self.get_app(app_id).params.global_state
 
@@ -43,8 +47,7 @@ class App:
     ) -> State:
         byte_key = bytes(key, "utf-8") if type(key) == str else key.to_bytes(key_byte_length, "big")
         if is_box:
-            box = self.algod_client.application_box_by_name(app_id, byte_key)
-            return State(box["name"], Value(box["value"], 0, 0))
+            return self.get_state_from_box(app_id, byte_key)
         states = (
             states if states else self.get_local_states(address, app_id) if address else self.get_global_states(app_id)
         )

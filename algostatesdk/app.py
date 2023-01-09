@@ -8,7 +8,7 @@ from dacite import from_dict
 
 from algostatesdk import exceptions
 from algostatesdk.models.app import *
-from algostatesdk.models.states import State, StateCustom
+from algostatesdk.models.states import State, StateCustom, Value
 
 
 class App:
@@ -44,7 +44,7 @@ class App:
         byte_key = bytes(key, "utf-8") if type(key) == str else key.to_bytes(key_byte_length, "big")
         if is_box:
             box = self.algod_client.application_box_by_name(app_id, byte_key)
-            return State(box["name"], box["value"])
+            return State(box["name"], Value(box["value"], 0, 0))
         states = (
             states if states else self.get_local_states(address, app_id) if address else self.get_global_states(app_id)
         )

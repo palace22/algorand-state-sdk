@@ -25,8 +25,8 @@ class AttributeCustom:
 
 @dataclass
 class StateCustom:
-    key: str | int
-    key_byte_length: Optional[int]
-    address: str
     attrs: List[AttributeCustom]
-    is_box: Optional[bool]
+    key: Optional[str | int] = None
+    address: Optional[str] = None
+    key_byte_length: Optional[int] = None
+    is_box: Optional[bool] = None

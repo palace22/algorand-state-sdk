@@ -27,5 +27,6 @@ class AttributeCustom:
 class StateCustom:
     key: str | int
     key_byte_length: int
+    is_box: bool
     address: str
     attrs: List[AttributeCustom]

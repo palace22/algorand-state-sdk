@@ -6,9 +6,9 @@ from algosdk.encoding import encode_address
 from algosdk.v2client.algod import AlgodClient
 from dacite import from_dict
 
+from algostatesdk import exceptions
 from algostatesdk.models.app import *
 from algostatesdk.models.states import State, StateCustom
-from algostatesdk import exceptions
 
 
 class App:
@@ -33,12 +33,21 @@ class App:
         return self.get_app_local_state(address, app_id).app_local_state.key_value
 
     def get_state(
-        self, app_id: int, key: str | int, address: str = None, states: List[State] = None, key_byte_length: int = 1
+        self,
+        app_id: int,
+        key: str | int,
+        address: str = None,
+        states: List[State] = None,
+        key_byte_length: int = 1,
+        is_box: bool = False,
     ) -> State:
+        byte_key = bytes(key, "utf-8") if type(key) == str else key.to_bytes(key_byte_length, "big")
+        if is_box:
+            box = self.algod_client.application_box_by_name(app_id, byte_key)
+            return State(box["name"], box["value"])
         states = (
             states if states else self.get_local_states(address, app_id) if address else self.get_global_states(app_id)
         )
-        byte_key = bytes(key, "utf-8") if type(key) == str else key.to_bytes(key_byte_length, "big")
         state = next(filter(lambda gs: base64.b64decode(gs.key) == byte_key, states), None)
         if not state:
             raise exceptions.NoLocalStateMatch(key, app_id, address)
@@ -113,7 +122,9 @@ class App:
 
     def get_state_custom(self, app_id: int, state_custom: StateCustom) -> dict:
         state, key, obj_custom = (
-            self.get_state(app_id, state_custom.key, state_custom.address, None, state_custom.key_byte_length),
+            self.get_state(
+                app_id, state_custom.key, state_custom.address, None, state_custom.key_byte_length, state_custom.is_box
+            ),
             state_custom.key,
             {},
         )

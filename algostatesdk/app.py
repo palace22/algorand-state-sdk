@@ -121,10 +121,9 @@ class App:
         return encode_address(value)
 
     def get_state_custom(self, app_id: int, state_custom: StateCustom) -> dict:
+        is_box = state_custom.is_box if hasattr(state_custom, "is_box") else None
         state, key, obj_custom = (
-            self.get_state(
-                app_id, state_custom.key, state_custom.address, None, state_custom.key_byte_length, state_custom.is_box
-            ),
+            self.get_state(app_id, state_custom.key, state_custom.address, None, state_custom.key_byte_length, is_box),
             state_custom.key,
             {},
         )

@@ -72,7 +72,11 @@ class App:
         if not state.value.type:
             return state.value.uint
         value_bytes = base64.b64decode(state.value.bytes)
-        return value_bytes if offset is None else int.from_bytes(value_bytes[offset : offset + size], "big")
+        return (
+            int.from_bytes(value_bytes, "big")
+            if offset is None
+            else int.from_bytes(value_bytes[offset : offset + size], "big")
+        )
 
     def extract_state_str(self, state: State, offset: int = None, size: int = None) -> str:
         gs_value_bytes = base64.b64decode(state.value.bytes)

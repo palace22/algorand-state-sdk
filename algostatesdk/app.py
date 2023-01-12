@@ -69,7 +69,7 @@ class App:
         return value_bytes if offset is None else value_bytes[offset : offset + size]
 
     def extract_state_int(self, state: State, offset: int = None, size: int = None) -> int:
-        if not state.value.type:
+        if state.value.type == 2:
             return state.value.uint
         value_bytes = base64.b64decode(state.value.bytes)
         return (

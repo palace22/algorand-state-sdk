@@ -40,7 +40,7 @@ class App:
         try:
             box = self.algod_client.application_box_by_name(app_id, byte_key)
         except:
-            raise exceptions.NoBoxFound(app_id, byte_key)
+            raise exceptions.NoBoxFound(app_id, key)
         return State(box["name"], Value(box["value"], 1, 0))
 
     def get_state(

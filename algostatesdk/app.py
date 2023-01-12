@@ -94,7 +94,7 @@ class App:
         address: str = None,
         key_byte_length: int = 1,
     ) -> bytes:
-        state = self.get_state(app_id, key, state_type, address, state, key_byte_length)
+        state = self.get_state(app_id, key, state_type, address, key_byte_length)
         return self.extract_state_bytes(state, offset, size)
 
     def get_state_int_value(
@@ -132,7 +132,7 @@ class App:
         address: str = None,
         key_byte_length: int = 1,
     ) -> str:
-        state = self.get_state(app_id, key, state_type, address, state, key_byte_length)
+        state = self.get_state(app_id, key, state_type, address, key_byte_length)
         return self.extract_state_addr(state, offset)
 
     def get_state_custom(self, app_id: int, sc: StateCustom) -> dict:

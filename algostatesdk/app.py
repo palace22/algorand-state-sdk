@@ -32,15 +32,16 @@ class App:
     def get_local_states(self, address: str, app_id: int) -> List[State]:
         return self.get_app_local_state(address, app_id).app_local_state.key_value
 
-    def get_box_state(self, app_id: int, byte_key) -> State:
+    def get_byte_key(self, key: str | int, key_byte_length: int = 8):
+        return bytes(key, "utf-8") if type(key) == str else key.to_bytes(key_byte_length, "big")
+
+    def get_box_state(self, app_id: int, key: str | int | bytes, key_byte_length: int = None) -> State:
+        byte_key = key if type(key) is bytes else self.get_byte_key(key, key_byte_length)
         try:
             box = self.algod_client.application_box_by_name(app_id, byte_key)
         except:
             raise exceptions.NoBoxFound(app_id, byte_key)
         return State(box["name"], Value(box["value"], 1, 0))
-
-    def get_byte_key(self, key: str | int, key_byte_length: int = 8):
-        return bytes(key, "utf-8") if type(key) == str else key.to_bytes(key_byte_length, "big")
 
     def get_state(
         self, app_id: int, key: str | int | bytes, state_type: str, address: str = None, key_byte_length: int = None

@@ -17,7 +17,7 @@ state_custom = StateCustom(
         AttributeCustom("addr", 32, 9, "algo_addr"),
         AttributeCustom("bytes", 87, 41, "extra"),
     ],
-    type=StateCustomType.BOX,
+    type=StateCustomType.GLOBAL,
 )
 ```
 #### JSON

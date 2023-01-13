@@ -19,18 +19,15 @@ class App:
         res = json.dumps(self.algod_client.application_info(app_id)).replace("-", "_")  # TODO
         return from_dict(Application, json.loads(res))
 
-    def get_app_local_state(self, address: str, app_id: int) -> ApplicationLocalState:
-        try:
-            res = json.dumps(self.algod_client.account_application_info(address, app_id)).replace("-", "_")  # TODO
-            return from_dict(ApplicationLocalState, json.loads(res))
-        except:
-            raise exceptions.NoLocalStatesFound(app_id, address)
-
     def get_global_states(self, app_id: int) -> List[State]:
         return self.get_app(app_id).params.global_state
 
     def get_local_states(self, address: str, app_id: int) -> List[State]:
-        return self.get_app_local_state(address, app_id).app_local_state.key_value
+        try:
+            res = json.dumps(self.algod_client.account_application_info(address, app_id)).replace("-", "_")  # TODO
+        except:
+            raise exceptions.NoLocalStatesFound(app_id, address)
+        return from_dict(ApplicationLocalState, json.loads(res)).app_local_state.key_value
 
     def get_byte_key(self, key: str | int, key_byte_length: int = 8):
         return bytes(key, "utf-8") if type(key) == str else key.to_bytes(key_byte_length, "big")
@@ -79,14 +76,14 @@ class App:
         )
 
     def extract_state_str(self, state: State, offset: int = None, size: int = None) -> str:
-        gs_value_bytes = base64.b64decode(state.value.bytes)
-        value = gs_value_bytes if offset is None else gs_value_bytes[offset : offset + size]
-        return value.decode("utf-8")
+        value_bytes = base64.b64decode(state.value.bytes)
+        value_bytes = value_bytes if offset is None else value_bytes[offset : offset + size]
+        return value_bytes.decode("utf-8")
 
     def extract_state_addr(self, state: State, offset: int = None) -> str:
-        gs_value_bytes = base64.b64decode(state.value.bytes)
-        value = gs_value_bytes if not offset else gs_value_bytes[offset : offset + 32]
-        return encode_address(value)
+        value_bytes = base64.b64decode(state.value.bytes)
+        value_bytes = value_bytes if offset is None else value_bytes[offset : offset + 32]
+        return encode_address(value_bytes)
 
     def get_state_bytes_value(
         self,

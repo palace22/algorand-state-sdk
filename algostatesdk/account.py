@@ -11,8 +11,6 @@ class Account:
         self.algod_client = algod_client
 
     def raw_asset_balance(self, address: str, asset_id: int) -> int:
-        from pprint import pprint
-
         res = json.dumps(self.algod_client.account_asset_info(address, asset_id)).replace("-", "_")  # TODO
         acc_asset_holding = from_dict(AccountAssetInfo, json.loads(res))
         return acc_asset_holding.asset_holding.amount

@@ -5,7 +5,7 @@ A python SDK to decode Algorand global and local states.
 ### Example
 #### Python
 ```python
-from algostatesdk.models.states import StateCustom, AttributeCustom
+from algostatesdk.models.states import StateCustom, AttributeCustom, StateCustomType
 
 state_custom = StateCustom(
     key='info', # global or local state key
@@ -17,6 +17,7 @@ state_custom = StateCustom(
         AttributeCustom("addr", 32, 9, "algo_addr"),
         AttributeCustom("bytes", 87, 41, "extra"),
     ],
+    type=StateCustomType.BOX,
 )
 ```
 #### JSON
@@ -31,6 +32,7 @@ state_custom = StateCustom(
         {"type": "addr", "size": 32, "offset": 9, "name":"algo_addr"},
         {"type": "bytes", "size": 87, "offset": 41, "name":"extra"},
         ],
+    "type":"global"
 }
 ```
 

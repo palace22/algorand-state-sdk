@@ -25,9 +25,9 @@ class App:
     def get_local_states(self, address: str, app_id: int) -> List[State]:
         try:
             res = json.dumps(self.algod_client.account_application_info(address, app_id)).replace("-", "_")  # TODO
+            return from_dict(ApplicationLocalState, json.loads(res)).app_local_state.key_value
         except:
             raise exceptions.NoLocalStatesFound(app_id, address)
-        return from_dict(ApplicationLocalState, json.loads(res)).app_local_state.key_value
 
     def get_byte_key(self, key: str | int, key_byte_length: int = 8):
         return bytes(key, "utf-8") if type(key) == str else key.to_bytes(key_byte_length, "big")

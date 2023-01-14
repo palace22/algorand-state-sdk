@@ -8,7 +8,7 @@ from dacite import from_dict
 
 from algostatesdk import exceptions
 from algostatesdk.models.app import *
-from algostatesdk.models.states import State, StateCustom, Value, StateCustomType, AttributeCustomType
+from algostatesdk.models.states import State, StateSchema, Value, StateType, AttributeType
 
 
 class App:
@@ -46,18 +46,18 @@ class App:
         byte_key = key if type(key) is bytes else self.get_byte_key(key, key_byte_length)
 
         match state_type:
-            case StateCustomType.BOX:
+            case StateType.BOX:
                 return self.get_box_state(app_id, byte_key)
-            case StateCustomType.GLOBAL:
+            case StateType.GLOBAL:
                 states = self.get_global_states(app_id)
-            case StateCustomType.LOCAL:
+            case StateType.LOCAL:
                 states = self.get_local_states(address, app_id)
 
         state = next(filter(lambda state: base64.b64decode(state.key) == byte_key, states), None)
 
         if state:
             return state
-        if state_type == StateCustomType.GLOBAL:
+        if state_type == StateType.GLOBAL:
             raise exceptions.NoGlobalStateMatch(app_id, str(byte_key))
         raise exceptions.NoLocalStateMatch(str(byte_key), app_id, address)
 
@@ -136,19 +136,19 @@ class App:
         state = self.get_state(app_id, key, state_type, address, key_byte_length)
         return self.extract_state_addr(state, offset)
 
-    def get_state_custom(self, app_id: int, sc: StateCustom) -> dict:
+    def get_state_custom(self, app_id: int, sc: StateSchema) -> dict:
         state = self.get_state(app_id, sc.key, sc.type, sc.address, sc.key_byte_length)
         state_custom = {}
         for attr in sc.attrs:
             match attr.type:
-                case AttributeCustomType.STR:
+                case AttributeType.STR:
                     state_custom[attr.name] = self.extract_state_str(state, attr.offset, attr.size)
-                case AttributeCustomType.INT:
+                case AttributeType.INT:
                     state_custom[attr.name] = self.extract_state_int(state, attr.offset, attr.size)
-                case AttributeCustomType.BYTES:
+                case AttributeType.BYTES:
                     state_custom[attr.name] = self.extract_state_bytes(state, attr.offset, attr.size)
-                case AttributeCustomType.ADDR:
+                case AttributeType.ADDR:
                     state_custom[attr.name] = self.extract_state_addr(state, attr.offset)
                 case _:
-                    raise exceptions.WrongAttributeCustomType(attr)
+                    raise exceptions.WrongAttributeType(attr)
         return state_custom

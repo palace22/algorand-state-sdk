@@ -1,4 +1,4 @@
-class WrongAttributeCustomType(Exception):
+class WrongAttributeType(Exception):
     def __init__(self, attr_type):
         Exception.__init__(
             self,

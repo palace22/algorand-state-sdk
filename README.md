@@ -5,19 +5,19 @@ A python SDK to decode Algorand global and local states.
 ### Example
 #### Python
 ```python
-from algostatesdk.models.states import StateCustom, AttributeCustom, StateCustomType
+from algostatesdk.models.states import StateSchema, AttributeSchema, StateType
 
-state_custom = StateCustom(
+state_custom = StateSchema(
     key='info', # global or local state key
     key_byte_length=None, # iif key is int 
     address=None, # iif it is a local state
     attrs=[
-        AttributeCustom("str", 8, 0, "name"),
-        AttributeCustom("int", 1, 8, "age"),
-        AttributeCustom("addr", 32, 9, "algo_addr"),
-        AttributeCustom("bytes", 87, 41, "extra"),
+        AttributeSchema("str", 8, 0, "name"),
+        AttributeSchema("int", 1, 8, "age"),
+        AttributeSchema("addr", 32, 9, "algo_addr"),
+        AttributeSchema("bytes", 87, 41, "extra"),
     ],
-    type=StateCustomType.GLOBAL,
+    type=StateType.GLOBAL,
 )
 ```
 #### JSON
@@ -45,7 +45,7 @@ app_id = ###
 
 algo_state_client = AlgoStateClient(algod_token, algod_address)
 
-# state_custom = from_dict(StateCustom, state_json)
+# state_custom = from_dict(StateSchema, state_json)
 
 decoded_state = algo_state_client.app.get_state_custom(app_id, state_custom)
 ```

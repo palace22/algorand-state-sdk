@@ -16,7 +16,7 @@ class State:
     value: Value
 
 
-class AttributeCustomType(Enum):
+class AttributeType(Enum):
     INT = "int"
     STR = "str"
     ADDR = "addr"
@@ -24,23 +24,23 @@ class AttributeCustomType(Enum):
 
 
 @dataclass
-class AttributeCustom:
-    type: Literal[AttributeCustomType.INT, AttributeCustomType.STR, AttributeCustomType.ADDR, AttributeCustomType.BYTES]
+class AttributeSchema:
+    type: Literal[AttributeType.INT, AttributeType.STR, AttributeType.ADDR, AttributeType.BYTES]
     size: int
     offset: int
     name: str
 
 
-class StateCustomType(Enum):
+class StateType(Enum):
     LOCAL = "local"
     GLOBAL = "global"
     BOX = "box"
 
 
 @dataclass
-class StateCustom:
-    attrs: List[AttributeCustom]
-    type: Literal[StateCustomType.GLOBAL, StateCustomType.LOCAL, StateCustomType.BOX]
+class StateSchema:
+    attrs: List[AttributeSchema]
+    type: Literal[StateType.GLOBAL, StateType.LOCAL, StateType.BOX]
     key: Optional[str | int] = None
     address: Optional[str] = None
     key_byte_length: Optional[int] = None

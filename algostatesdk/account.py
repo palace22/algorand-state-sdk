@@ -19,3 +19,6 @@ class Account:
         decimals = self.algod_client.asset_info(asset_id)["params"]["decimals"]
         raw_balance = self.raw_asset_balance(address, asset_id)
         return raw_balance / 10**decimals
+
+    def min_balance(self, address: str):
+        return self.algod_client.account_info(address)["min-balance"]

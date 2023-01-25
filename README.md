@@ -1,6 +1,10 @@
 # Algorand State SDK
 
-A python SDK to decode Algorand global and local states.
+A python SDK to decode Algorand global, local and box states.
+
+The goal is to have a ready-to-use library to decode the states on the Algorand blockchain, plus some useful methods to render the algod client responses as objects.
+
+The decoding can be defined by a schema i.e. the `StateSchema`, in which to indicate the `key`, `type`, and the attributes that will be decoded from the state value ; The attributes (`attrs`) are defined by the `AttributeSchema` in which must be defined the `type`, `name`, `offset` and `size` of each.
 
 ### Example
 #### Python

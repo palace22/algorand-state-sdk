@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from typing import Literal, List, Optional
 from enum import Enum
+from typing import List, Literal, Optional
 
 
 @dataclass

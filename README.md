@@ -12,10 +12,10 @@ state_custom = StateSchema(
     key_byte_length=None, # iif key is int 
     address=None, # iif it is a local state
     attrs=[
-        AttributeSchema("str", 8, 0, "name"),
-        AttributeSchema("int", 1, 8, "age"),
-        AttributeSchema("addr", 32, 9, "algo_addr"),
-        AttributeSchema("bytes", 87, 41, "extra"),
+        AttributeSchema(AttributeType.STR, 8, 0, "name"),
+        AttributeSchema(AttributeType.INT, 1, 8, "age"),
+        AttributeSchema(AttributeType.ADDR, 32, 9, "algo_addr"),
+        AttributeSchema(AttributeType.BYTES, 87, 41, "extra"),
     ],
     type=StateType.GLOBAL,
 )
@@ -39,13 +39,12 @@ state_custom = StateSchema(
 #### Decoding
 
 ```python
-algod_token = ###
-algod_address = ###
+algod_client = ##
 app_id = ###
 
-algo_state_client = AlgoStateClient(algod_token, algod_address)
+algo_state_client = AlgoStateClient(algod_client)
 
-# state_custom = from_dict(StateSchema, state_json)
+state_custom = from_dict(StateSchema, state_json)
 
-decoded_state = algo_state_client.app.get_state_custom(app_id, state_custom)
+decoded_state = algo_state_client.get_state_custom(app_id, state_custom)
 ```

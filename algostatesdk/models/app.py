@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
+
 from algostatesdk.models.states import State
-from typing import Optional
 
 
 @dataclass

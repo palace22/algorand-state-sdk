@@ -24,7 +24,7 @@ class AlgoStateClient:
             case StateType.LOCAL:
                 states = App.local_states(self.algod_client, address, app_id)
             case _:
-                print("default")
+                raise exceptions.WrongStateType(state_type)
 
         state = next(filter(lambda state: base64.b64decode(state.key) == byte_key, states), None)
 

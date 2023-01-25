@@ -1,8 +1,16 @@
+class WrongStateType(Exception):
+    def __init__(self, state_type):
+        Exception.__init__(
+            self,
+            "Wrong state type: {}".format(state_type),
+        )
+
+
 class WrongAttributeType(Exception):
     def __init__(self, attr_type):
         Exception.__init__(
             self,
-            "Wrong attribute type: {attr_type}".format(attr_type),
+            "Wrong attribute type: {}".format(attr_type),
         )
 
 

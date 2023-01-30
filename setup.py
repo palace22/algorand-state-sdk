@@ -15,7 +15,7 @@ setuptools.setup(
     project_urls={
         "Source": "https://github.com/palace22/algorand-state-sdk",
     },
-    install_requires=["py-algorand-sdk >= 1.20.1", "dacite >= 1.7.0"],
+    install_requires=["py-algorand-sdk >= 2.0.0", "dacite >= 1.7.0"],
     packages=setuptools.find_packages(),
     python_requires=">=3.8",
     include_package_data=True,

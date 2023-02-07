@@ -36,7 +36,7 @@ class AlgoStateClient:
 
     def extract_state_bytes(self, state: State, offset: int = None, size: int = None) -> bytes:
         value_bytes = base64.b64decode(state.value.bytes)
-        return value_bytes if offset is None else value_bytes[offset : offset + size]
+        return value_bytes if offset is None else value_bytes[offset : offset + size if size else None]
 
     def extract_state_int(self, state: State, offset: int = None, size: int = None) -> int:
         if state.value.type == 2:

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import  Optional
 
 
 @dataclass
@@ -6,8 +7,6 @@ class AssetParams:
     creator: str
     decimals: int
     default_frozen: bool
-    freeze: str
-    manager: str
     name: str
     name_b64: str
     reserve: str
@@ -16,6 +15,9 @@ class AssetParams:
     unit_name_b64: str
     url: str
     url_b64: str
+    freeze: Optional[str]=None
+    manager: Optional[str]=None
+    clawback: Optional[str]=None
 
 
 @dataclass

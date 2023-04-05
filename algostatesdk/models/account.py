@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 from algostatesdk.models.states import State
 
@@ -50,3 +50,4 @@ class AccountInfo:
     total_assets_opted_in: int
     total_created_apps: int
     total_created_assets: int
+    auth_addr: Optional[str] = None

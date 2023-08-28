@@ -7,8 +7,8 @@ class AssetParams:
     creator: str
     decimals: int
     default_frozen: bool
-    reserve: str
     total: int
+    reserve: Optional[str] = None
     name: Optional[str] = None
     name_b64: Optional[str] = None
     unit_name: Optional[str] = None
